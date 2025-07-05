@@ -96,10 +96,12 @@ const HomePage: React.FC = () => {
       });
       if (error) throw error;
       // 成功メッセージはonAuthStateChangeで処理
-    } catch (error: any) {
-      showMessage(error.message || 'エラーが発生しました', 'error');
-    } finally {
-      setIsLoading(false);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        showMessage(error.message || 'エラーが発生しました', 'error');
+      } else {
+        showMessage('不明なエラーが発生しました', 'error');
+      }
     }
   };
 
@@ -113,24 +115,34 @@ const HomePage: React.FC = () => {
         }
       });
       if (error) throw error;
-    } catch (error: any) {
-      showMessage(error.message || 'Discord認証エラーが発生しました', 'error');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        showMessage(error.message || 'Discord認証エラーが発生しました', 'error');
+      } else {
+        showMessage('Discord認証中に不明なエラーが発生しました', 'error');
+      }
       setIsLoading(false);
     }
   };
+  
 
   const handleSignOut = async () => {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      // 成功メッセージはonAuthStateChangeで処理
-    } catch (error: any) {
-      showMessage('ログアウトに失敗しました', 'error');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        showMessage(error.message || 'ログアウトに失敗しました', 'error');
+      } else {
+        showMessage('ログアウト中に不明なエラーが発生しました', 'error');
+      }
     } finally {
       setIsLoading(false);
     }
   };
+  
+
 
   // 認証状態確認中のローディング
   if (isCheckingAuth) {
