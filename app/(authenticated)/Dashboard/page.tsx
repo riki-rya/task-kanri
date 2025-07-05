@@ -22,42 +22,7 @@ export default function Dashboard() {
 
   const supabase = createClient();
 
-  const fetchCurrentUser = async () => {
-    const user = await currentUser();
-    if (user) {
-      const { data, error } = await supabase.from("member").select("*").eq("login_id", user.email);
-
-      if (error) {
-        console.error("Error fetching current user", error);
-        return;
-      }
-      setCurrentUsers(data || []);
-      // console.log(currentUsers)
-    }
-  };
-
   // プロジェクトを取得
-  const fetchProject = async () => {
-    const { data, error } = await supabase.from("projects").select("*");
-    if (error) {
-      console.error("Project acquisition error", error);
-      return;
-    }
-    
-    // プロジェクトをソート（プロジェクト名でアルファベット順）
-    const sortedProjects = (data || []).sort((a, b) => {
-      const nameA = a.project_name || '';
-      const nameB = b.project_name || '';
-      return nameA.localeCompare(nameB);
-    });
-    
-    setProjects(sortedProjects);
-    
-    // 最初のプロジェクトを自動選択
-    if (sortedProjects.length > 0 && !selectedProject) {
-      setSelectedProject(sortedProjects[0].id);
-    }
-  };
 
   // ステートを取得
   const fetchState = async (projectId: string) => {
@@ -89,15 +54,6 @@ export default function Dashboard() {
       return;
     }
     setTasks(data || []);
-  };
-
-  const fetchMembers = async () => {
-    const { data, error } = await supabase.from("member").select("*");
-    if (error) {
-      console.error("Member acquisition error", error);
-      return;
-    }
-    setMembers(data || []);
   };
 
   // Update task state when dragged to a new state
@@ -141,6 +97,51 @@ export default function Dashboard() {
 
   // 初回レンダリング時にデータを取得
   useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const user = await currentUser();
+      if (user) {
+        const { data, error } = await supabase.from("member").select("*").eq("login_id", user.email);
+  
+        if (error) {
+          console.error("Error fetching current user", error);
+          return;
+        }
+        setCurrentUsers(data || []);
+        // console.log(currentUsers)
+      }
+    };
+
+    const fetchProject = async () => {
+      const { data, error } = await supabase.from("projects").select("*");
+      if (error) {
+        console.error("Project acquisition error", error);
+        return;
+      }
+      
+      // プロジェクトをソート（プロジェクト名でアルファベット順）
+      const sortedProjects = (data || []).sort((a, b) => {
+        const nameA = a.project_name || '';
+        const nameB = b.project_name || '';
+        return nameA.localeCompare(nameB);
+      });
+      
+      setProjects(sortedProjects);
+      
+      // 最初のプロジェクトを自動選択
+      if (sortedProjects.length > 0 && !selectedProject) {
+        setSelectedProject(sortedProjects[0].id);
+      }
+    };
+
+    const fetchMembers = async () => {
+      const { data, error } = await supabase.from("member").select("*");
+      if (error) {
+        console.error("Member acquisition error", error);
+        return;
+      }
+      setMembers(data || []);
+    };
+
     const fetchData = async () => {
       await fetchProject();
       await fetchCurrentUser();
@@ -148,7 +149,7 @@ export default function Dashboard() {
     };
 
     fetchData();
-  }, []);
+  }, [selectedProject, supabase]);
 
   // selectedProjectが変更されたらステートとタスクを取得
   useEffect(() => {
