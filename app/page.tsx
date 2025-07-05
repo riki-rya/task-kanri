@@ -88,22 +88,25 @@ const HomePage: React.FC = () => {
   const handleEmailAuth = async (e?: React.FormEvent | React.KeyboardEvent) => {
     if (e) e.preventDefault();
     setIsLoading(true);
-
+  
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       if (error) throw error;
-      // 成功メッセージはonAuthStateChangeで処理
+      // 成功時の処理は onAuthStateChange に任せる
     } catch (error: unknown) {
       if (error instanceof Error) {
         showMessage(error.message || 'エラーが発生しました', 'error');
       } else {
         showMessage('不明なエラーが発生しました', 'error');
       }
+    } finally {
+      setIsLoading(false); // ← 成功・失敗どちらでも解除される
     }
   };
+  
 
   const handleDiscordAuth = async () => {
     setIsLoading(true);
