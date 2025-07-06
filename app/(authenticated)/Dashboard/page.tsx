@@ -237,7 +237,7 @@ export default function Dashboard() {
     <div className="container mx-auto p-4">
       {/* ヘッダー部分 */}
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Project Dashboard</h1>
+        <h1 className="text-2xl font-bold">Dashboard</h1>
         <button
           onClick={handleOpenModal}
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
