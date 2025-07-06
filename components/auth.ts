@@ -52,4 +52,5 @@ export async function signOut() {
     console.error('Sign out error:', error.message)
     // 必要ならエラー処理
   }
+  redirect('/');
 }

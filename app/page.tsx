@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from "@/utils/supabase/client";
 import { Eye, EyeOff, Mail, Lock, AlertCircle, CheckCircle, ArrowRight, KanbanSquare } from 'lucide-react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 const supabase = createClient();
@@ -108,25 +107,25 @@ const HomePage: React.FC = () => {
   };
   
 
-  const handleDiscordAuth = async () => {
-    setIsLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'discord',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`
-        }
-      });
-      if (error) throw error;
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        showMessage(error.message || 'Discord認証エラーが発生しました', 'error');
-      } else {
-        showMessage('Discord認証中に不明なエラーが発生しました', 'error');
-      }
-      setIsLoading(false);
-    }
-  };
+  // const handleDiscordAuth = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const { error } = await supabase.auth.signInWithOAuth({
+  //       provider: 'discord',
+  //       options: {
+  //         redirectTo: `${window.location.origin}/auth/callback`
+  //       }
+  //     });
+  //     if (error) throw error;
+  //   } catch (error: unknown) {
+  //     if (error instanceof Error) {
+  //       showMessage(error.message || 'Discord認証エラーが発生しました', 'error');
+  //     } else {
+  //       showMessage('Discord認証中に不明なエラーが発生しました', 'error');
+  //     }
+  //     setIsLoading(false);
+  //   }
+  // };
   
 
   const handleSignOut = async () => {
@@ -273,7 +272,7 @@ const HomePage: React.FC = () => {
         )}
 
         {/* ソーシャルログインボタン */}
-        <div className="space-y-3">
+        {/* <div className="space-y-3">
           <button
             onClick={handleDiscordAuth}
             disabled={isLoading}
@@ -284,17 +283,17 @@ const HomePage: React.FC = () => {
             </svg>
             {isLoading ? '認証中...' : 'Discordでログイン'}
           </button>
-        </div>
+        </div> */}
 
         {/* 区切り線 */}
-        <div className="relative">
+        {/* <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-300"></div>
           </div>
           <div className="relative flex justify-center text-sm">
             <span className="px-2 bg-white text-gray-500">または</span>
           </div>
-        </div>
+        </div> */}
 
         {/* ログインフォーム */}
         <div className="space-y-4">
@@ -354,14 +353,14 @@ const HomePage: React.FC = () => {
             )}
           </button>
 
-          <div className="text-center">
+          {/* <div className="text-center">
             <Link 
               href="/login"
               className="text-blue-600 hover:text-blue-700 text-sm font-medium"
             >
               その他のログイン方法
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
